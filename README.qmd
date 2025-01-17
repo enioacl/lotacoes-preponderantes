@@ -1,7 +1,7 @@
 ---
 title: "Lotações Preponderantes"
 author: "Ênio Lopes"
-format: html
+format: gfm
 editor: visual
 lang: pt
 execute:
