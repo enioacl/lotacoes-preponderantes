@@ -1,24 +1,20 @@
----
-title: "Lotações Preponderantes"
-author: "Ênio Lopes"
-format: gfm
-editor: visual
-lang: pt
-execute:
-  echo: true
-  warning: false
-  message: false
----
+# Lotações Preponderantes
+Ênio Lopes
 
-Primeiramente deve-se gerar relatório de designações do período de interesse no Sistema de Gratificação de Magistrados (SGM).
+Primeiramente deve-se gerar relatório de designações do período de
+interesse no Sistema de Gratificação de Magistrados (SGM).
 
 ``` r
 'A pasta utilizada na rede foi a seguinte: X:\SGE\GABINETE\LICENÇA COMPENSATÓRIA\2025'
 ```
 
-Em Jan/2025 a funcionalidade de exportar as designações para *.xls* não estava funcionando no SGM. Assim, tive que transformar o arquivo *.pdf* para *.csv* a fim de realizar o cálculo das lotações preponderantes dos magistrados.
+Em Jan/2025 a funcionalidade de exportar as designações para *.xls* não
+estava funcionando no SGM. Assim, tive que transformar o arquivo *.pdf*
+para *.csv* a fim de realizar o cálculo das lotações preponderantes dos
+magistrados.
 
-Para transformar o arquivo *.pdf* para *.csv* foi utilizado o seguinte código em python:
+Para transformar o arquivo *.pdf* para *.csv* foi utilizado o seguinte
+código em python:
 
 ``` python
 import tabula
@@ -32,10 +28,12 @@ designacoes=pd.concat(tables)
 designacoes.to_csv(csv_path)
 ```
 
-Após isso, foi utilizado o script R abaixo com o objetivo de calcular o número de dias que cada juiz esteve lotado nas VTs. E, posteriormente, identificar qual a VT que o juiz passou mais dias lotados durante o ano de 2024:
+Após isso, foi utilizado o script R abaixo com o objetivo de calcular o
+número de dias que cada juiz esteve lotado nas VTs. E, posteriormente,
+identificar qual a VT que o juiz passou mais dias lotados durante o ano
+de 2024:
 
-```{r,message=FALSE}
-
+``` r
 #Pacotes necessários
 library(dplyr)
 library(lubridate)
@@ -82,26 +80,11 @@ for (i in juizes){
 
 resumo<-left_join(resumo,unidades,by=c("unidade"="UNIDADE"))%>%
   filter(TIPO=="VT")
-
 ```
 
 O resultado pode ser observado por meio da seguinte tabela:
 
-```{r}
-#| echo: false
+![](Lotacoes_Preponderantes_files/figure-commonmark/unnamed-chunk-2-1.png)
 
-library(DT)
-# Renderizar a tabela como interativa
-datatable(resumo|>
-            select(-TIPO), 
-            options = list(
-              paging = TRUE,  # Adicionar paginação
-              searching = TRUE,  # Adicionar barra de busca
-              ordering = TRUE,  # Habilitar ordenação de colunas
-              pageLength=100
-            ),
-            colnames = c("Magistrado","Vara do Trabalho","Dias lotados na VT","Dias               lotados - Total*")
-)
-```
-
-\* *Dias lotados - Total* : Nessa coluna é apresentado o número de dias totais em que o magistrado esteve lotado em algumas das VTs do TRT-7.
+\* *Dias lotados - Total* : Nessa coluna é apresentado o número de dias
+totais em que o magistrado esteve lotado em algumas das VTs do TRT-7.
